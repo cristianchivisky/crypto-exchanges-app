@@ -1,0 +1,60 @@
+# Dependencias de Node.js
+node_modules/
+
+# Directorios generados por Expo
+.expo/
+.expo-shared/
+
+# Directorios de construcción
+dist/
+build/
+web-build/
+
+# Archivos de configuración de compilación
+npm-debug.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+
+# Archivos de configuración de llaves y certificados
+*.pem
+*.crt
+*.csr
+
+# Configuraciones de iOS/Android
+ios/Pods/
+android/app/build/
+android/.gradle/
+android/.idea/
+android/local.properties
+android/app/src/main/assets/
+android/app/src/main/jniLibs/
+
+# Archivos de entorno y configuración
+.env
+.env.*.local
+
+# Configuraciones de editor de texto
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Archivos generados por macOS
+.DS_Store
+
+# Archivos generados por Expo CLI
+expo-env.d.ts
+
+# Archivos y directorios específicos de OS/Editor
+Thumbs.db
+Desktop.ini
+
+# Archivos de log
+*.log
+
+# Archivos de respaldo
+*.bak
