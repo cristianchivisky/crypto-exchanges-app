@@ -1,18 +1,21 @@
 # Aplicación de Exchanges de Criptomonedas
 
-Esta aplicación móvil desarrollada en **React Native** consume la API REST de **CoinAPI** para mostrar información sobre exchanges de criptomonedas. Permite visualizar el volumen de transacciones en los principales exchanges en tiempo real.
+Esta aplicación móvil desarrollada en **React Native** consume la API REST de **CoinAPI** para mostrar información sobre exchanges de criptomonedas. Permite a los usuarios buscar y ordenar exchanges, así como ver detalles sobre su volumen de transacciones en tiempo real.
 
 ## Características
 
-- Visualización en tiempo real del volumen de transacciones en diferentes exchanges.
-- Interfaz moderna y atractiva, diseñada para una experiencia de usuario fluida.
+- **Visualización de Exchanges:** Muestra una lista de exchanges de criptomonedas con detalles sobre el volumen de transacciones.
+- **Búsqueda y Ordenación:** Permite buscar exchanges por nombre y ordenarlos alfabéticamente.
+- **Indicador de Carga:** Muestra un indicador de carga animado mientras se obtienen los datos.
+- **Manejo de Errores:** Muestra un mensaje de error con opción para reintentar si la carga falla.
+- **Botón de Desplazamiento:** Un botón para desplazarse rápidamente hacia arriba en la lista.
 
 ## Requisitos Previos
 
 Asegúrate de tener instalados los siguientes programas en tu sistema antes de empezar:
 
-- **Node.js** (versión 20 o superior)
-- **npm** o **yarn** (gestor de paquetes)
+- **Node.js** 
+- **npm** 
 - **CoinAPI** key (obtén una clave API desde [CoinAPI](https://www.coinapi.io/))
 
 ## Instalación
@@ -42,7 +45,7 @@ Sigue estos pasos para configurar el proyecto en tu entorno local:
    Crea un archivo **.env** en la raíz del proyecto y añade tu clave API:
 
    ```bash
-   COIN_API_KEY=tu_clave_api
+   EXPO_PUBLIC_COIN_API_KEY=tu_clave_api
    ```
 
 2. **Inicia la aplicación:**
@@ -51,11 +54,11 @@ Sigue estos pasos para configurar el proyecto en tu entorno local:
     npm run start
    ```
 
-Esto abrirá Expo Developer Tools en tu navegador. Desde aquí, puedes correr la app en un simulador o dispositivo físico.
+Podrás ejecutar la aplicación en un emulador o en un dispositivo físico usando la aplicación Expo Go.
 
 ## Contribuir
 
-Si deseas contribuir a este proyecto, sigue estos pasos:
+Las contribuciones son bienvenidas. Si deseas contribuir a este proyecto, sigue estos pasos:
 
 1. Haz un fork del repositorio.
 
@@ -86,4 +89,4 @@ Este proyecto está bajo la licencia MIT. Consulta el archivo **LICENSE** para o
 
 ## Contacto
 
-Si tienes alguna pregunta o sugerencia, no dudes en contactarme a través de [cristianchivisky@gmail.com](mailto:cristianchivisky@gmail.com)
+Si tienes alguna pregunta o sugerencia, no dudes en contactarme a través de [cristian.chivisky@gmail.com](mailto:cristian.chivisky@gmail.com)

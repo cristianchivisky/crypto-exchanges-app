@@ -1,58 +1,68 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
-import { fetchExchanges } from '@/api/coinApi';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, StyleSheet, FlatList, Animated, RefreshControl, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
+import { useExchanges } from '@/hooks/useExchanges';
 import ExchangeCard from '@/components/ExchangeCard';
 import Loading from '@/components/Loading';
 import Error from '@/components/Error';
+import Header from '@/components/Header';
+import SearchAndSort from '@/components/SearchAndSort';
+import ScrollToTopButton from '@/components/ScrollToTopButton';
 
-interface Exchange {
-  exchange_id: string;
-  name: string;
-  volume_1hrs_usd: number;
-  volume_1day_usd: number;
-}
-
+// Componente principal que muestra una lista de intercambios con soporte para búsqueda, ordenamiento y desplazamiento.
 export default function Index() {
-  const [exchanges, setExchanges] = useState<Exchange[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { exchanges, loading, error, refreshing, loadExchanges } = useExchanges();
+  const [displayedExchanges, setDisplayedExchanges] = useState(exchanges);
+  const [showScrollTopButton, setShowScrollTopButton] = useState(false);
+  const flatListRef = useRef<FlatList>(null);
+  const scrollY = useRef(new Animated.Value(0)).current;
 
-  const loadExchanges = async () => {
-    try {
-      setLoading(true); 
-      const data = await fetchExchanges();
-      setExchanges(data);
-    } catch (err) {
-      const errorMessage = (err as Error).message || 'Error desconocido';
-      setError(errorMessage);
-    } finally {
-      setLoading(false);
-    }
+  // Actualiza la lista de intercambios cuando los datos cambian
+  useEffect(() => {
+    setDisplayedExchanges(exchanges);  // Inicializa con los datos originales
+  }, [exchanges]);
+
+  // Muestra un componente de carga mientras los datos están siendo obtenidos
+  if (loading && !refreshing) return <Loading />;
+
+  // Muestra un componente de error en caso de fallos
+  if (error) return <Error message={error} onRetry={loadExchanges} />;
+
+  // Controla el evento de desplazamiento para mostrar el botón de volver al inicio
+  const handleScroll = Animated.event(
+    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+    { useNativeDriver: false }
+  );
+
+  // Maneja el evento cuando el desplazamiento termina
+  const handleScrollEnd = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const offsetY = event.nativeEvent.contentOffset.y;
+    setShowScrollTopButton(offsetY > 200); // Muestra el botón si se desplaza más de 200 unidades
   };
 
-  useEffect(() => {
-    loadExchanges();
-  }, []);
-
-  if (loading) return <Loading />;
-  if (error) return <Error message={error} />;
-
-  const renderExchange = ({ item, index }: { item: Exchange; index: number }) => (
-    <ExchangeCard key={item.exchange_id} exchange={item} index={index} />
-  );
+  // Desplaza la lista al inicio
+  const scrollToTop = () => {
+    flatListRef.current?.scrollToOffset({ offset: 0, animated: true });
+    setShowScrollTopButton(false);
+  };
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={loadExchanges} >
-          <Text style={styles.title}>Exchanges de Criptomonedas</Text>
-        </TouchableOpacity>
-      </View>
+      <Header title="Exchanges de Criptomonedas" onReload={loadExchanges} />
+      <SearchAndSort exchanges={exchanges} onSearchChange={setDisplayedExchanges} />
       <FlatList
-        data={exchanges} 
-        renderItem={renderExchange}
+        ref={flatListRef}
+        data={displayedExchanges}
+        renderItem={({ item }) => <ExchangeCard exchange={item} />}
         keyExtractor={(item) => item.exchange_id}
+        onScroll={handleScroll}
+        onMomentumScrollEnd={handleScrollEnd}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={loadExchanges} />
+        }
+        ListHeaderComponent={<View style={styles.listHeader} />}
+        contentContainerStyle={styles.listContent}
       />
+      <ScrollToTopButton show={showScrollTopButton} onPress={scrollToTop} />
     </View>
   );
 }
@@ -62,23 +72,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f0f2f5', 
   },
-  header: {
-    padding: 20,
-    backgroundColor: '#4a90e2',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    elevation: 8, 
+  listHeader: {
+    paddingTop: 10,
   },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: '#fff', 
-    textShadowColor: 'rgba(0, 0, 0, 0.3)', 
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 3,
-    marginVertical: 2,
+  listContent: {
+    paddingBottom: 20,
   },
 });

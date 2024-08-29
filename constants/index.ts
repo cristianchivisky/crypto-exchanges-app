@@ -1,0 +1,1 @@
+export const COIN_API_URL = 'https://rest.coinapi.io/v1/exchanges';

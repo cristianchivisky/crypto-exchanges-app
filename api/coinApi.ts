@@ -1,28 +1,27 @@
-export const COIN_API_URL = 'https://rest.coinapi.io/v1/exchanges';
+import { COIN_API_URL } from '@/constants/index'
+import { Exchange } from '@/types/exchange';
 
-interface Exchange {
-    exchange_id: string;
-    name: string;
-    volume_1hrs_usd: number;
-    volume_1day_usd: number;
-}
-
+// Función para obtener intercambios desde la API de CoinAPI
 export const fetchExchanges = async (): Promise<Exchange[]> => {
 
-    if (!process.env.COIN_API_KEY) {
+    // Verifica si la clave de API está disponible
+    if (!process.env.EXPO_PUBLIC_COIN_API_KEY) {
         throw new Error('API key is missing.');
     }
 
+    // Realiza la solicitud a la API
     const response = await fetch(COIN_API_URL, {
         headers: {
-            'X-CoinAPI-Key': process.env.COIN_API_KEY,
+            'X-CoinAPI-Key': process.env.EXPO_PUBLIC_COIN_API_KEY,
         },
     });
 
+    // Maneja errores en la respuesta
     if (!response.ok) {
-        throw new Error('Error en la llamada a la API');
+        throw new Error(`Fallo en la llamada a la API: ${response.status}`);
     }
 
+    // Devuelve los datos obtenidos de la API
     const data: Exchange[] = await response.json();
     return data;
 }
