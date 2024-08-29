@@ -65,19 +65,20 @@ Las contribuciones son bienvenidas. Si deseas contribuir a este proyecto, sigue 
 2. Crea una nueva rama:
 
    ```bash
-   git checkout -b feature/nueva-caracteristica
+   git checkout -b nombre-de-tu-rama
    ```
 
 3. Realiza los cambios necesarios y haz un commit
 
    ```bash
-   git commit -m 'Añadir nueva característica'
+   git add .
+   git commit -m 'Descripción de los cambios realizados'
    ```
 
 4. Sube los cambios a tu fork:
 
    ```bash
-   git push origin feature/nueva-caracteristica
+   git push origin nombre-de-tu-rama
    ```
 
 5. Abre un Pull Request.
